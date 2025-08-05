@@ -8,6 +8,8 @@ GPRBUILD_OPTIONS                        := -j4
 export ADAFLAGS                         ?=
 export LDFLAGS                          ?=
 
+export GPRBUILD_FLAGS += -gnatwJ
+
 # For each library, a static archive is built by default but a
 # non-empty shared object version selects a relocatable library
 export latin_utils_soversion            :=
@@ -37,17 +39,17 @@ all: commands data
 # the dependency graph is only constructed once.
 .PHONY: commands
 commands: $(generated_sources)
-	$(GPRBUILD) -p $(GPRBUILD_OPTIONS) commands.gpr
+	$(GPRBUILD) $(GPRBUILD_FLAGS) -p $(GPRBUILD_OPTIONS) commands.gpr
 
 # Targets delegated to gprbuild are declared phony even if they build
 # concrete files, because Make ignores all about Ada dependencies.
 .PHONY: $(PROGRAMMES)
 $(PROGRAMMES): $(generated_sources)
-	$(GPRBUILD) -p $(GPRBUILD_OPTIONS) commands.gpr $@
+	$(GPRBUILD) $(GPRBUILD_FLAGS) -p $(GPRBUILD_OPTIONS) commands.gpr $@
 
 .PHONY: sorter
 sorter: $(generated_sources)
-	$(GPRBUILD) -p $(GPRBUILD_OPTIONS) tools.gpr $@
+	$(GPRBUILD) $(GPRBUILD_FLAGS) -p $(GPRBUILD_OPTIONS) tools.gpr $@
 
 # Executable targets are phony (see above), so we tell Make to only
 # check that they exist but ignore the timestamp.  This is not
